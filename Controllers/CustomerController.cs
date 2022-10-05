@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace apinet6.Controllers
 {
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [Authorize]
     [Authorize(Roles = "admin")]
 

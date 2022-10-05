@@ -10,7 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace apinet6.Controllers
 {
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -96,5 +96,41 @@ namespace apinet6.Controllers
             TokenResponse _result = Authenticate(username, principal.Claims.ToArray());
             return Ok(_result);
         }
+
+        [HttpPost("Register")]
+        public APIResponse Register([FromBody] TblUser value)
+        {
+            string result = string.Empty;
+            try
+            {
+                var _emp = _dBContext.TblUser.FirstOrDefault(o => o.Userid == value.Userid);
+                if (_emp != null)
+                {
+                    result = string.Empty;
+                }
+                else
+                {
+                    TblUser tblUser = new TblUser()
+                    {
+                        Name = value.Name,
+                        Email = value.Email,
+                        Userid = value.Userid,
+                        Role = string.Empty,
+                        Password = value.Password,
+                        IsActive = false
+                    };
+                    _dBContext.TblUser.Add(tblUser);
+                    _dBContext.SaveChanges();
+                    result = "pass";
+                }
+            }
+            catch (Exception ex)
+            {
+                result = string.Empty;
+            }
+            return new APIResponse { keycode = string.Empty, result = result };
+        }
     }
+
+
 }
